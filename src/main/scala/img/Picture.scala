@@ -1,15 +1,17 @@
-package com.fabian.picture.untyped
+package img
 
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 
-import com.fabian.picture.untyped.Picture.Matrix
+import img.Picture.Matrix
 
 import scala.util.Try
 
-case class Picture(pixels: Matrix[Color]) extends PictureTraversable {
+case class Picture(pixels: Matrix[Color]) {
+
+  import TraversablePicture._
 
   def height: Int = pixels.length
 
@@ -20,7 +22,7 @@ case class Picture(pixels: Matrix[Color]) extends PictureTraversable {
   def flipInVerticalAxis(): Picture = {
     val newPixels: Matrix[Color] = traverseMap(pixels) {
       case (data, row) =>
-        traverseMap[Color](data) {
+        traverseMap[Color, Color](data) {
           case (_, column) => pixelByRowColumn(row, width - 1 - column)
         }
     }
@@ -39,18 +41,30 @@ case class Picture(pixels: Matrix[Color]) extends PictureTraversable {
      */
     this
   }
+
+  def as[T](implicit trans: ImageTransformation[T]) = trans.transform(this)
+
 }
 
-trait PictureTraversable {
-  def traverseMap[U](Vector: Vector[U])(f: (U, Int) => U): Vector[U] = {
-    Vector.zipWithIndex.map {
+object TraversablePicture {
+  def traverseMap[U, V](vector: Vector[U])(f: (U, Int) => V): Vector[V] = {
+    vector.zipWithIndex.map {
       case (t, pos: Int) => f(t, pos)
+    }
+  }
+
+  def traverse[U](vector: Matrix[U])(f: (U, Int, Int) => Unit): Unit = {
+    traverseMap[Vector[U], Unit](vector) {
+      case (data, column) =>
+        traverseMap[U, Unit](data) {
+          case (pixel, row) => f(pixel, row, column)
+        }
     }
   }
 
 }
 
-object Picture extends PictureTraversable {
+object Picture {
 
   type Matrix[T] = Vector[Vector[T]]
 
@@ -62,13 +76,13 @@ object Picture extends PictureTraversable {
   }
 
   private def buildPixelMatrixFrom(image: BufferedImage): Matrix[Color] = {
+    import TraversablePicture._
     val width = image.getWidth
     val height = image.getHeight
     traverseMap(Vector.fill(height, width)(Color.BLACK)) {
       case (data, column) =>
-        traverseMap[Color](data) {
-          case (_, row) =>
-            buildPixel(image, row, column)
+        traverseMap[Color, Color](data) {
+          case (_, row) => buildPixel(image, row, column)
         }
     }
   }
@@ -82,4 +96,5 @@ object Picture extends PictureTraversable {
       pixel(2) // B
     )
   }
+
 }
