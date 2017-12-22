@@ -1,4 +1,4 @@
-package com.fabian.picture.typed.executing
+package img.executing
 
 import java.awt.image.BufferedImage
 import java.io.File

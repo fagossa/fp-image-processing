@@ -19,7 +19,7 @@ lazy val root = project.in(file("."))
     fork in run := true,
     fmtSettings,
     scalacOptions ++= scalaCSettings,
-    libraryDependencies ++= Seq(Akka, AkkaTestKit, ScalaTest)
+    libraryDependencies ++= Seq(`Cats-core`, ScalaTest)
   )
 
 lazy val fmtSettings =
@@ -35,6 +35,8 @@ lazy val scalaCSettings =
     "-deprecation",
     "-language:_",
     "-target:jvm-1.8",
-    "-encoding", "UTF-8",
-    "-Xfatal-warnings"
+    "-encoding",
+    "UTF-8",
+    "-Xfatal-warnings",
+    "-Ypartial-unification"
   )
