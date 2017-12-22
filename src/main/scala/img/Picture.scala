@@ -17,7 +17,7 @@ case class Picture(pixels: Matrix[Color]) {
 
   def pixelByRowColumn(row: Int, column: Int): Color = pixels(row)(column)
 
-  def flipInVerticalAxis(): Picture = {
+  def flipInVerticalAxis: Picture = {
     val newPixels: Matrix[Color] = traverseMap(pixels) {
       case (data, row) =>
         traverseMap[Color, Color](data) {
@@ -27,17 +27,14 @@ case class Picture(pixels: Matrix[Color]) {
     Picture(newPixels)
   }
 
-  def flipInHorizontalAxis(): Picture = {
-    /*val pixels = new Vector[Vector[Color]](height)(width).map {
-      row =>
-        new Vector[Color](width) {
-          column =>
-            pixelByRowColumn(height - 1 - row, column)
+  def flipInHorizontalAxis: Picture = {
+    val newPixels: Matrix[Color] = traverseMap(pixels) {
+      case (data, row) =>
+        traverseMap[Color, Color](data) {
+          case (_, column) => pixelByRowColumn(height - 1 - row, column)
         }
     }
-    Picture(pixels)
-     */
-    this
+    Picture(newPixels)
   }
 
   def as[T](implicit trans: FormatTransformation[T]) = trans.transform(this)
