@@ -14,7 +14,7 @@ object PictureExecutor extends App {
   Picture.fromFile(new File("src/main/resources/bulbasaur.png")) match {
     case Success(pic) =>
       println("No problemo loading image")
-      val result: Try[File] = pic.as[BufferedImage].toPng("new-bulbasaur.png")
+      val result: Try[File] = pic.as[BufferedImage].toPng("result.png")
       println(result)
 
     case Failure(err) =>

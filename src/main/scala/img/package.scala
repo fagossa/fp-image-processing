@@ -6,7 +6,9 @@ import scala.util.Try
 
 package object img {
 
-  trait ImageTransformation[T] {
+  type Matrix[T] = Vector[Vector[T]]
+
+  trait FormatTransformation[T] {
     def transform(pixels: Picture): T
   }
 
@@ -14,7 +16,7 @@ package object img {
 
     object buffered {
 
-      implicit val asBufferedImage = new ImageTransformation[BufferedImage] {
+      implicit val asBufferedImage = new FormatTransformation[BufferedImage] {
         override def transform(picture: Picture): BufferedImage = {
           val newImage =
             new BufferedImage(picture.width, picture.height, BufferedImage.TYPE_INT_ARGB)

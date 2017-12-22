@@ -5,8 +5,6 @@ import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 
-import img.Picture.Matrix
-
 import scala.util.Try
 
 case class Picture(pixels: Matrix[Color]) {
@@ -42,14 +40,24 @@ case class Picture(pixels: Matrix[Color]) {
     this
   }
 
-  def as[T](implicit trans: ImageTransformation[T]) = trans.transform(this)
+  def as[T](implicit trans: FormatTransformation[T]) = trans.transform(this)
 
 }
 
 object TraversablePicture {
+
   def traverseMap[U, V](vector: Vector[U])(f: (U, Int) => V): Vector[V] = {
     vector.zipWithIndex.map {
       case (t, pos: Int) => f(t, pos)
+    }
+  }
+
+  def traverseMap2[U, V](vector: Matrix[U])(f: (U, Int, Int) => V): Matrix[V] = {
+    traverseMap[Vector[U], Vector[V]](vector) {
+      case (data, column) =>
+        traverseMap[U, V](data) {
+          case (pixel, row) => f(pixel, row, column)
+        }
     }
   }
 
@@ -65,8 +73,6 @@ object TraversablePicture {
 }
 
 object Picture {
-
-  type Matrix[T] = Vector[Vector[T]]
 
   def fromFile(imageFile: File): Try[Picture] = {
     Try {
