@@ -1,3 +1,6 @@
+package com.fabian.icarus
+
+import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
@@ -8,16 +11,16 @@ package object img {
 
   type Matrix[T] = Vector[Vector[T]]
 
-  trait FormatTransformation[T] {
-    def transform(pixels: Picture): T
+  trait FormatTransformation[U, T] {
+    def transform(pixels: Picture[U]): T
   }
 
   object implicits {
 
     object buffered {
 
-      implicit val asBufferedImage = new FormatTransformation[BufferedImage] {
-        override def transform(picture: Picture): BufferedImage = {
+      implicit val asBufferedImage = new FormatTransformation[Color, BufferedImage] {
+        def transform(picture: Picture[Color]): BufferedImage = {
           val newImage =
             new BufferedImage(picture.width, picture.height, BufferedImage.TYPE_INT_ARGB)
           TraversablePicture.traverse(picture.pixels) {

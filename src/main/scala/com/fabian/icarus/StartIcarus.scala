@@ -1,17 +1,17 @@
-package img.executing
+package com.fabian.icarus
 
 import java.awt.image.BufferedImage
 import java.io.File
 
-import img.Picture
+import com.fabian.icarus.img.PictureBuilder
 
 import scala.util.{Failure, Success, Try}
 
-object PictureExecutor extends App {
+object StartIcarus extends App {
 
-  import img.implicits.buffered._
+  import com.fabian.icarus.img.implicits.buffered._
 
-  Picture.fromFile(new File("src/main/resources/bulbasaur.png")) match {
+  PictureBuilder.fromFile(new File("src/main/resources/bulbasaur.png")) match {
     case Success(pic) =>
       println("No problemo loading image")
       val result: Try[File] = pic.as[BufferedImage].toPng("result.png")
