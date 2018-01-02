@@ -6,7 +6,7 @@ import java.io.File
 
 import org.scalatest.{MustMatchers, WordSpec}
 
-class PictureSpec extends WordSpec with MustMatchers {
+class PictureSpec extends WordSpec with MustMatchers with PictureFixture {
 
   "a picture" must {
     val anImage = PictureBuilder.fromFile[Color](new File("src/main/resources/bulbasaur.png"))

@@ -19,7 +19,7 @@ object PictureBuilder {
     import java.io.File
     import javax.imageio.ImageIO
 
-    override def build(imageFile: File) =
+    override def build(imageFile: File): Try[Picture[Color]] =
       Try {
         val pixels: Matrix[Color] = buildPixelMatrixFrom(ImageIO.read(imageFile))
         new Picture(pixels)
