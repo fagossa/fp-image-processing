@@ -1,5 +1,6 @@
 package com.fabian.icarus.img
 
+import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
 
@@ -8,7 +9,7 @@ import org.scalatest.{MustMatchers, WordSpec}
 class PictureSpec extends WordSpec with MustMatchers {
 
   "a picture" must {
-    val anImage = PictureBuilder.fromFile(new File("src/main/resources/bulbasaur.png"))
+    val anImage = PictureBuilder.fromFile[Color](new File("src/main/resources/bulbasaur.png"))
 
     "be loaded from disk" in {
       anImage must be('Success)
