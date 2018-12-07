@@ -26,6 +26,30 @@ object fp {
       }
       PImage(x, y, Image(image.w, image.h, data))
     }
+
+    def up: PImage[T] = {
+      val py = y - 1
+      val ny = if (py >= 0) py else py + image.h
+      PImage(x, ny, image)
+    }
+
+    def down: PImage[T] = {
+      val py = y + 1
+      val ny = if (py < image.h) py else py - image.h
+      PImage(x, ny, image)
+    }
+
+    def left: PImage[T] = {
+      val px = x - 1
+      val nx = if (px >= 0) px else px + image.w
+      PImage(nx, y, image)
+    }
+
+    def right: PImage[T] = {
+      val px = x + 1
+      val nx = if (px < image.w) px else px - image.w
+      PImage(nx, y, image)
+    }
   }
 
 }
