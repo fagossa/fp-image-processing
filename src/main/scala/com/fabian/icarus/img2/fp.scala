@@ -4,13 +4,15 @@ object fp {
 
   import scala.collection.parallel.immutable.ParVector
   case class Image[T](w: Int, h: Int, data: ParVector[T]) {
-
     def apply(x: Int, y: Int): T = data(x * h + y)
 
     def map[S](f: T => S): Image[S] = Image(w, h, data map f)
 
     def updated(x: Int, y: Int, value: T): Image[T] =
       Image(w, h, data.updated(x * h + y, value))
+
+    def as[U](implicit trans: FormatTransformation[U]): U =
+      trans.transform[T](this)
   }
 
   case class PImage[T](x: Int, y: Int, image: Image[T]) {
