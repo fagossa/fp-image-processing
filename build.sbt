@@ -12,7 +12,7 @@ lazy val root = project.in(file("."))
         version := "0.1"
       )
     ),
-    name := "erasthosthenes-akka",
+    name := "icarus",
     licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0"))
   )
   .settings(
@@ -40,3 +40,6 @@ lazy val scalaCSettings =
     "-Xfatal-warnings",
     "-Ypartial-unification"
   )
+
+scalafmtOnCompile in ThisBuild := true
+scalafmtTestOnCompile in ThisBuild := true
